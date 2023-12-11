@@ -3,14 +3,14 @@ using System.Text;
 
 namespace ClassLibrary.Solvers;
 
-internal abstract class BaseSquardleSolver : ISquardleSolver
+public class SquardleSolver : ISquardleSolver
 {        
     protected string RawValues { get; set; }
-    protected GridCell[,] Grid { get; set; }
+    public GridCell[,] Grid { get; private set; }
     private ISquardleDictionary Dictionary { get; set; }
     private List<string> Words { get; set; } = new();
 
-    protected BaseSquardleSolver(string? values, ISquardleDictionary dictionary)
+    public SquardleSolver(string? values, ISquardleDictionary dictionary)
     {
         RawValues = values ?? string.Empty;
         Dictionary = dictionary;
@@ -38,6 +38,18 @@ internal abstract class BaseSquardleSolver : ISquardleSolver
                 CreateConnections(i, j, hasAbove, hasBelow, hasLeft, hasRight);
             }
         }
+    }
+
+    private int GetGridSize()
+    {
+        var sqrt = (int) Math.Sqrt(RawValues.Length);
+
+        if ((1.0 * RawValues.Length / sqrt) != sqrt)
+        {
+            throw new ArgumentException("Value string provided could not be divided into a square grid");
+        }
+
+        return sqrt;
     }
 
     private void CreateConnections(int row, int col, bool hasAbove, bool hasBelow, bool hasLeft, bool hasRight)
@@ -86,6 +98,7 @@ internal abstract class BaseSquardleSolver : ISquardleSolver
     public override string ToString()
     {
         var gridSize = GetGridSize();
+
         var stringBuilder = new StringBuilder();
 
         stringBuilder.AppendLine("Raw value = " + RawValues);
@@ -170,6 +183,4 @@ internal abstract class BaseSquardleSolver : ISquardleSolver
             }
         }
     }
-
-    protected abstract int GetGridSize();
 }

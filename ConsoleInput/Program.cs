@@ -4,7 +4,7 @@ using ClassLibrary.DictionaryTrees;
 
 public class Program
 {
-    private static bool ShowGridPrintout = false;
+    private static bool ShowGridPrintout = true;
     private static bool AllowDictionaryQuery = false;
 
     /// <summary>
@@ -14,14 +14,13 @@ public class Program
     {
         ISquardleSolver? solver;
         ISquardleDictionary dictionary = new DictionaryTree();
-        var factory = new SquardleSolverFactory();
 
         do
         {
             Console.WriteLine("Enter the squardle from left to right, top to bottom: ");
             var squardleValues = Console.ReadLine();
 
-            solver = factory.Create(squardleValues, dictionary);
+            solver = new SquardleSolver(squardleValues, dictionary);
 
             if (solver is null)
             {
